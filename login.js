@@ -1,24 +1,46 @@
-{
-  "name": "yeccommerce",
-  "version": "1.0.0",
-  "description": "MERN Stack E-commerce Application",
-  "main": "server.js",
-  "scripts": {
-  "start": "node server.js",
-  "dev": "nodemon server.js"
-},
-  "dependencies": {
-    "@paypal/checkout-server-sdk": "^1.0.3",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "express-validator": "^6.14.1",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.9.3",
-    "nodemon": "^2.0.20"
-  },
-  "author": "tejaswi vasam",
-  "license": "ISC"
-}
+// src/pages/Login.js
+import React, { useState } from 'react';
+import axios from 'axios';
+
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Handle login functionality
+    try {
+      const response = await axios.post('/api/users/login', { email, password });
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <div>
+      <h1>Login</h1>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          name="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          placeholder="Email"
+        />
+        <input
+          type="password"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          placeholder="Password"
+        />
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
