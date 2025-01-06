@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayPal Payment</title>
+</head>
+<body>
+  <h1>Pay with PayPal</h1>
+  <div id="paypal-button-container"></div>
+
+  <!-- PayPal SDK (Replace YOUR_ACTUAL_PAYPAL_CLIENT_ID with your PayPal client ID) -->
+  <script src="https://www.paypal.com/sdk/js?client-id=YOUR_ACTUAL_PAYPAL_CLIENT_ID&components=buttons"></script>
+
+  <script>
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        return fetch('/pay', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ amount: '20.00' }) // Pass the amount dynamically
+        })
+        .then(response => response.json())
+        .then(orderData => {
+          return orderData.approvalUrl;
+        });
+      },
+      onApprove: function(data, actions) {
+        return fetch('/capture', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ orderId: data.orderID })
+        })
+        .then(response => response.json())
+        .then(captureData => { // Fixed the variable name here
+          alert('Payment Successful');
+          console.log(captureData);
+        });
+      }
+    }).render('#paypal-button-container');
+  </script>
+</body>
+</html>
+

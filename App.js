@@ -1,31 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import MyComponent from './MyComponent';
-import './App.css';
-import axios from 'axios';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import ProductPage from './pages/ProductPage';
 
-function App() {
-  const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/users')
-      .then(response => {
-        setUsers(response.data);
-        setLoading(false);
-      })
-      .catch(error => console.error(error));
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
+const App = () => {
   return (
-    <div className="App">
-      <h1>Emmorce Website</h1>
-      <MyComponent users={users} />
-    </div>
-    );
-}
+    <Router>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/product/:id" element={<ProductPage />} />
+      </Routes>
+    </Router>
+  );
+};
 
 export default App;
